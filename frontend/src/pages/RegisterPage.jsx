@@ -24,25 +24,28 @@ const RegisterPage = () => {
     e.preventDefault();
     setLoading(true);
 
-    if (!formData.username || !formData.email || !formData.password || !formData.confirmPassword) {
-      toast.error('Please fill in all fields');
-      setLoading(false);
-      return;
-    }
+    // if (!formData.username || !formData.email || !formData.password || !formData.confirmPassword) {
+    //   toast.error('Please fill in all fields');
+    //   setLoading(false);
+    //   return;
+    // }
 
-    if (formData.password !== formData.confirmPassword) {
-      toast.error('Passwords do not match');
-      setLoading(false);
-      return;
-    }
+    // if (formData.password !== formData.confirmPassword) {
+    //   toast.error('Passwords do not match');
+    //   setLoading(false);
+    //   return;
+    // }
+// allo hhhh yarbi ntfker hadi hhhh
 
-    if (formData.password.length < 6) {
-      toast.error('Password must be at least 6 characters long');
-      setLoading(false);
-      return;
-    }
+    // if (formData.password.length < 6) {
+      // toast.error('Password must be at least 6 characters long');
+      // setLoading(false);
+      // return;
+    // }
 
     try {
+      console.log('allo front to register endpoint');   
+      // return ;    
       const response = await fetch('http://localhost:5000/auth/register', {
         method: 'POST',
         headers: {
@@ -62,10 +65,10 @@ const RegisterPage = () => {
         throw new Error(data.message || 'Registration failed');
       }
 
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(data.user));
+      // localStorage.setItem('token', data.token);
+      // localStorage.setItem('user', JSON.stringify(data.user));
       toast.success('Registration successful!');
-      navigate('/dashboard');
+      // navigate('/login');
     } catch (err) {
       toast.error(err.message || 'Failed to register. Please try again.');
     } finally {
@@ -74,7 +77,7 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-800 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-blue-500 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8 bg-white p-10 rounded-xl shadow-2xl">
         <div>
           <h2 className="text-center text-3xl font-extrabold text-gray-900">
@@ -140,6 +143,7 @@ const RegisterPage = () => {
                 Confirm Password
               </label>
               <input
+                // key={}
                 id="confirmPassword"
                 name="confirmPassword"
                 type="password"

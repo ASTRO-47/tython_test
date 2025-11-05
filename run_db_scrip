@@ -1,0 +1,1 @@
+sudo -u postgres psql -d ticketing_system -f database/schema.sql && sudo -u postgres psql -d ticketing_system -f database/seed.sql
