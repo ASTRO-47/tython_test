@@ -23,8 +23,8 @@ const DashboardPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <nav className="bg-white shadow-lg">
+        <div className="min-h-screen flex flex-col bg-gray-100">
+      <nav className="fixed w-full top-0 z-50 bg-white shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center">
@@ -39,7 +39,6 @@ const DashboardPage = () => {
                 onClick={handleLogout}
                 className="px-2 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition inline-flex items-center space-x-2"
               >
-                {/* <span>Logout</span> */}
                 <LogOut size={18} />
               </button>
             </div>
@@ -47,23 +46,25 @@ const DashboardPage = () => {
         </div>
       </nav>
 
-      <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div className="px-4 py-6 sm:px-0">
-          <div className="mb-6">
-            <h2 className="text-3xl font-bold text-gray-900">
-              Welcome, {user.username}!
-            </h2>
-            <p className="text-gray-600 mt-2">
-              Role: <span className="font-semibold text-purple-600 capitalize">{user.role}</span>
-            </p>
+      <main className="flex-1 overflow-auto pt-16">
+        <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+          <div className="px-4 py-6 sm:px-0">
+            <div className="mb-6">
+              <h2 className="text-3xl font-bold text-gray-900">
+                Welcome, {user.username}!
+              </h2>
+              <p className="text-gray-600 mt-2">
+                Role: <span className="font-semibold text-purple-600 capitalize">{user.role}</span>
+              </p>
+            </div>
+            
+            {/* Render appropriate dashboard based on user role */}
+            {user.role === 'admin' && <AdminDashboard user={user} />}
+            {user.role === 'support' && <SupportDashboard user={user} />}
+            {user.role === 'user' && <UserDashboard user={user} />}
           </div>
-          
-          {/* Render appropriate dashboard based on user role */}
-          {user.role === 'admin' && <AdminDashboard user={user} />}
-          {user.role === 'support' && <SupportDashboard user={user} />}
-          {user.role === 'user' && <UserDashboard user={user} />}
         </div>
-      </div>
+      </main>
     </div>
   );
 };

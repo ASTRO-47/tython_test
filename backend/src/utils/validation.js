@@ -31,15 +31,15 @@ export const loginValidation = [
 ];
 
 export const ticketValidation = [
-  body('title')
-    .trim()
-    .isLength({ min: 3, max: 255 })
-    .withMessage('Title must be between 3 and 255 characters'),
-  body('description')
-    .optional()
-    .trim(),
-  body('status')
-    .optional()
-    .isIn(['open', 'in-progress', 'resolved', 'closed'])
-    .withMessage('Invalid status specified')
+  // body('title')
+  //   .trim()
+  //   .isLength({ min: 3, max: 255 })
+  //   .withMessage('Title must be between 3 and 255 characters'),
+  // body('description')
+  //   .optional()
+  //   .trim(),
+  // body('status')
+  //   .optional()
+  //   .isIn(['open', 'in-progress', 'resolved', 'closed'])
+  //   .withMessage('Invalid status specified')
 ];

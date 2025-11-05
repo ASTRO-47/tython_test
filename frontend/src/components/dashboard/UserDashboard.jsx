@@ -1,11 +1,32 @@
 import { useState, useEffect } from 'react';
-import { Plus, Ticket, Clock } from 'lucide-react';
+import { Plus, Ticket, Clock, Trash2 } from 'lucide-react';
+import { toast } from 'sonner';
 import CreateTicketModal from '../tickets/CreateTicketModal';
 
 const UserDashboard = ({ user }) => {
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleDelete = async (ticketId) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`http://localhost:5000/tickets/${ticketId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete ticket');
+      }
+
+      fetchTickets(); // Refresh the tickets list
+    } catch (err) {
+      toast.error('Error deleting ticket');
+    }
+  };
 
   const fetchTickets = async () => {
     try {
