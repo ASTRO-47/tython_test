@@ -3,17 +3,56 @@ import { Toaster } from 'sonner'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import DashboardPage from './pages/DashboardPage'
+import { AuthProvider, useAuth } from './context/AuthContext'
+
+function AppRoutes() {
+  const { isAuthenticated } = useAuth();
+
+  return (
+    <Routes>
+      <Route 
+        path="/" 
+        element={
+          isAuthenticated ? 
+          <Navigate to="/dashboard" replace /> : 
+          <Navigate to="/login" replace />
+        } 
+      />
+      <Route 
+        path="/login" 
+        element={
+          isAuthenticated ? 
+          <Navigate to="/dashboard" replace /> : 
+          <LoginPage />
+        } 
+      />
+      <Route 
+        path="/register" 
+        element={
+          isAuthenticated ? 
+          <Navigate to="/dashboard" replace /> : 
+          <RegisterPage />
+        } 
+      />
+      <Route 
+        path="/dashboard" 
+        element={
+          isAuthenticated ? 
+          <DashboardPage /> : 
+          <Navigate to="/login" replace />
+        } 
+      />
+    </Routes>
+  );
+}
 
 function App() {
   return (
     <Router>
-      <Toaster position="top-center" expand={false} richColors />
-      <Routes>
-        <Route path="/" element={<Navigate to="/login" replace />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/dashboard" element={<DashboardPage />} />
-      </Routes>
+      <AuthProvider>
+        <Toaster position="top-center" expand={false} richColors />
+        <AppRoutes />
+      </AuthProvider>
     </Router>
   )
 }
