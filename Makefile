@@ -1,5 +1,5 @@
 up:
-	docker compose -f docker-compose-dev.yml up -d
+	docker compose -f docker-compose-dev.yml up
 down:
 	docker compose -f docker-compose-dev.yml  down 
 re: down up
