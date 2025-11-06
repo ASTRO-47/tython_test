@@ -1,0 +1,58 @@
+services:
+  frontend:
+    networks:
+      - main_net
+    build:
+      context: ./frontend
+    env_file:
+        ./backend/.env
+    volumes:
+      - ./frontend/:/app
+    ports:
+      - "5173:5173"
+
+  backend:
+    networks:
+      - main_net
+    build:
+      context: ./backend
+    env_file:
+      ./backend/.env
+    volumes:
+      - ./backend/:/app
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "5000:5000"
+
+
+  postgres:
+    image: postgres:15
+    container_name: tython_postgres
+    restart: unless-stopped
+    networks:
+      - main_net
+    env_file:
+      ./backend/.env
+    environment:
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-TYTHON2025}
+      POSTGRES_DB: ${DB_NAME:-ticketing_system}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres} -d ${DB_NAME:-ticketing_system}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  
+networks:
+  main_net:
+    name: main_net
+
+volumes:
+  postgres_data:

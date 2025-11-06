@@ -7,9 +7,9 @@ dotenv.config({ path: '../../.env' });
 
 const dbConfig = {
   user: process.env.DB_USER || 'postgres',
-  host: process.env.DB_HOST || 'localhost',
+  host: process.env.DB_HOST || 'postgres',
   database: process.env.DB_NAME || 'ticketing_system',
-  password: 'TYTHON2025',  // Hardcoded for now
+  password: process.env.DB_PASSWORD || 'TYTHON2025',
   port: parseInt(process.env.DB_PORT || '5432'),
 };
 
@@ -22,6 +22,13 @@ const pool = new Pool(dbConfig);
 
 async function createUser(username, email, password, role) {
   try {
+    const checkQuery = 'SELECT id FROM users WHERE username = $1 OR email = $2';
+    const checkResult = await pool.query(checkQuery, [username, email]);
+    if (checkResult.rows.length > 0) {
+      console.log(`User ${username} or email ${email} already exists. Skipping creation.`);
+      return;
+    }
+
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 

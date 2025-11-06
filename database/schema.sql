@@ -53,13 +53,3 @@ $$ language 'plpgsql';
 -- Create trigger for tickets table
 CREATE TRIGGER update_tickets_updated_at BEFORE UPDATE ON tickets
 FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
--- Insert some sample data for testing (optional)
--- Note: Password is 'password123' hashed with bcrypt
-INSERT INTO users (username, email, password, role) VALUES
-('admin', 'admin@example.com', '$2b$10$rKqKZ5Z5Z5Z5Z5Z5Z5Z5ZuXxxxxxxxxxxxxxxxxxxxxxxxxxxx', 'admin'),
-('support1', 'support@example.com', '$2b$10$rKqKZ5Z5Z5Z5Z5Z5Z5Z5ZuXxxxxxxxxxxxxxxxxxxxxxxxxxxx', 'support'),
-('user1', 'user1@example.com', '$2b$10$rKqKZ5Z5Z5Z5Z5Z5Z5Z5ZuXxxxxxxxxxxxxxxxxxxxxxxxxxxx', 'user');
-
--- Note: The passwords above are placeholders. You'll need to generate proper bcrypt hashes
--- when you actually seed the database through your application
