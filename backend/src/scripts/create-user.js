@@ -3,10 +3,8 @@ import pkg from 'pg';
 import dotenv from 'dotenv';
 const { Pool } = pkg;
 
-// Load environment variables from the correct path
 dotenv.config({ path: '../../.env' });
 
-// Database configuration
 const dbConfig = {
   user: process.env.DB_USER || 'postgres',
   host: process.env.DB_HOST || 'localhost',
@@ -15,7 +13,6 @@ const dbConfig = {
   port: parseInt(process.env.DB_PORT || '5432'),
 };
 
-// Log the configuration (without password)
 console.log('Database configuration:', {
   ...dbConfig,
   password: '[HIDDEN]'
@@ -25,18 +22,15 @@ const pool = new Pool(dbConfig);
 
 async function createUser(username, email, password, role) {
   try {
-    // Hash the password
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-    // SQL query to insert user
     const query = `
       INSERT INTO users (username, email, password, role) 
       VALUES ($1, $2, $3, $4)
       RETURNING id, username, email, role;
     `;
 
-    // Execute query
     const result = await pool.query(query, [username, email, hashedPassword, role]);
     const user = result.rows[0];
 
@@ -52,14 +46,13 @@ async function createUser(username, email, password, role) {
 
   } catch (err) {
     console.error('Error creating user:', err.message);
-    throw err;  // Propagate the error up
+    throw err;  
   }
 }
 
-// Create admin and support users
+
 async function createInitialUsers() {
   try {
-    // Create admin user
     await createUser(
       'imad',
       'imad@company.com',
@@ -67,7 +60,6 @@ async function createInitialUsers() {
       'admin'
     );
 
-    // Create support user
     await createUser(
       'ezzaghba',
       'ezzaghba@company.com',
@@ -78,8 +70,7 @@ async function createInitialUsers() {
   } catch (error) {
     console.error('Error creating initial users:', error);
   } finally {
-    await pool.end();  // Close pool after all operations are done
-  }
+    await pool.end();  }
 }
 
 createInitialUsers();

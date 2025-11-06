@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
+import { useAuth } from '../context/AuthContext';
 
 const RegisterPage = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -24,27 +26,27 @@ const RegisterPage = () => {
     e.preventDefault();
     setLoading(true);
 
-    // if (!formData.username || !formData.email || !formData.password || !formData.confirmPassword) {
-    //   toast.error('Please fill in all fields');
-    //   setLoading(false);
-    //   return;
-    // }
+    if (!formData.username || !formData.email || !formData.password || !formData.confirmPassword) {
+      toast.error('Please fill in all fields');
+      setLoading(false);
+      return;
+    }
 
-    // if (formData.password !== formData.confirmPassword) {
-    //   toast.error('Passwords do not match');
-    //   setLoading(false);
-    //   return;
-    // }
+    if (formData.password !== formData.confirmPassword) {
+      toast.error('Passwords do not match');
+      setLoading(false);
+      return;
+    }
 // allo hhhh yarbi ntfker hadi hhhh
 
-    // if (formData.password.length < 6) {
-      // toast.error('Password must be at least 6 characters long');
-      // setLoading(false);
-      // return;
-    // }
+    if (formData.password.length < 6) {
+      toast.error('Password must be at least 6 characters long');
+      setLoading(false);
+      return;
+    }
 
     try {
-      console.log('allo front to register endpoint');   
+      // console.log('allo front to register endpoint');   
       // return ;    
       const response = await fetch('http://localhost:5000/auth/register', {
         method: 'POST',
@@ -65,10 +67,9 @@ const RegisterPage = () => {
         throw new Error(data.message || 'Registration failed');
       }
 
-      // localStorage.setItem('token', data.token);
-      // localStorage.setItem('user', JSON.stringify(data.user));
+      login(data.token, data.user);
       toast.success('Registration successful!');
-      // navigate('/login');
+      navigate('/dashboard');
     } catch (err) {
       toast.error(err.message || 'Failed to register. Please try again.');
     } finally {
@@ -105,7 +106,6 @@ const RegisterPage = () => {
                 placeholder="Choose a username"
               />
             </div>
-
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                 Email

@@ -19,7 +19,6 @@ export const register = async (req, res) => {
     console.log('email: ',email);
     console.log('password: ',password);
     // console.log('username: ',username);
-    // Check if user already exists
     const existingUser = await User.findByEmail(email);
     if (existingUser ) {
         return res.status(400).json({ message: 'User already exists with this email' });
@@ -64,19 +63,16 @@ export const login = async (req, res) => {
 
     const { email, password } = req.body;
 
-    // Find user
     const user = await User.findByEmail(email);
     if (!user) {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
 
-    // Verify password
     const isValidPassword = await User.verifyPassword(password, user.password);
     if (!isValidPassword) {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
 
-    // Generate JWT token
     const token = jwt.sign(
       { id: user.id, username: user.username, role: user.role },
       process.env.JWT_SECRET,
